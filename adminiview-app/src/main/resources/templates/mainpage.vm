@@ -1,0 +1,30 @@
+<html>
+<body>
+#set( $months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] )
+<h1>Overview</h1>
+<h2>Topics</h2>
+
+#foreach( $topic in $documentTopics)
+	<a href="${topicPagePrefix}${topic.getId()}.html">${topic.getName()} [${topic.getCount()}]</a>&nbsp;&nbsp;
+#end
+ 
+<h2>By Year</h2>
+<table>
+#foreach( $reportedYear in $documentsByYear )
+	<tr>
+	<td><b>${reportedYear.getYear()} <a href="${yearPagePrefix}${reportedYear.getYear()}.html">[${reportedYear.getCount()}]</a></b>&nbsp;&nbsp;&nbsp;</td>
+	#foreach( $month in $months ) 
+		<td>
+		#if( $reportedYear.hasMonth($month) )
+			<a href="${yearPagePrefix}${reportedYear.getYear()}.html#month_${month}">[${reportedYear.monthName(${month})}]</a></td>	
+		#end
+		</td>
+	#end
+	</tr>
+#end
+</table>
+
+<h2>Keyword Cloud</h2>
+
+</body>
+<html>

@@ -1,0 +1,12 @@
+<html>
+<body>
+<h1>${topicName}</h1>
+<table>
+#foreach( $document in $topicDocuments )
+<tr>
+<td>${document.dateString()}</td><td><a href="${document.pathURL()}" target="_blank">${document.fileName()}</a></td>
+</tr>
+#end
+</table>
+</body>
+<html>
