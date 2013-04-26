@@ -26,6 +26,6 @@ The date conventions (for now) are:
 Building
 ========
 It is a maven project, make sure you have that installed. Then run: 
-- mvn build
+- mvn compile
 
 As said, this tool is intended for personal use. if there are any suggestions to improve it, it would be appreciated if it comes with a pull request :-)
