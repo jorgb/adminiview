@@ -21,6 +21,7 @@ import jobod.adminiview.generator.report.Topic;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 public class DocumentReportWriterImpl implements DocumentReportWriter {
 	private final String TOPIC_PAGE_PREFIX = "topic_";
@@ -34,7 +35,12 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 		_documents = documents;
 	
 		Properties p = new Properties(); 
-		p.setProperty("file.resource.loader.path", "src/main/resources/templates");
+		
+		p.setProperty("resource.loader", "file, class");
+		p.setProperty("file.resource.loader.path", "src/main/resources");
+		p.setProperty("class.resource.loader.class", ClasspathResourceLoader.class.getName());
+		
+		p.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute");
 		
 		Velocity.init(p);	
 	}
@@ -58,7 +64,7 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 	}
 
 	private void generateReportedYear(ReportedYear ry) throws IOException {
-		Template t = Velocity.getTemplate("yearpage.vm");
+		Template t = Velocity.getTemplate("templates/yearpage.vm");
 
 		VelocityContext context = new VelocityContext();
 		
@@ -74,7 +80,7 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 	}
 
 	private void generateTopicPage(int id, String name) throws IOException {
-		Template t = Velocity.getTemplate("topicpage.vm");
+		Template t = Velocity.getTemplate("templates/topicpage.vm");
 
 		VelocityContext context = new VelocityContext();
 		
@@ -104,7 +110,7 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 
 	private void generateMainPage(Collection<Topic> topics, Collection<ReportedYear> reportedYears) throws IOException {
 
-		Template t = Velocity.getTemplate("mainpage.vm");
+		Template t = Velocity.getTemplate("templates/mainpage.vm");
 
 		VelocityContext context = new VelocityContext();
 		context.put("topicPagePrefix", TOPIC_PAGE_PREFIX);
