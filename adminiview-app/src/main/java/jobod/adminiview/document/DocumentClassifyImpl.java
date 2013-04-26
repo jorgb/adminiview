@@ -33,8 +33,21 @@ public class DocumentClassifyImpl implements DocumentClassify {
 		// TODO: -- Implement keywords
 		
 		String datePart = fileName.substring(timeSepPos + 1);
+
+		// remove page before dot
+		int pageSepPos = datePart.lastIndexOf("_");
+		if(pageSepPos > 0) {
+			datePart = datePart.substring(0, pageSepPos);
+		}
 		
+		// remove dot if still present
 		int dotSepPos = datePart.lastIndexOf(".");
+		if(dotSepPos > 0 && pageSepPos == -1) {
+			datePart = datePart.substring(0, dotSepPos);
+		}
+		
+		if(dotSepPos == -1) {
+		}
 		if(dotSepPos != -1) {
 			datePart = datePart.substring(0, dotSepPos);
 		}

@@ -27,7 +27,9 @@ public class BatchClassifyProperDocumentTest {
 			   	{ "aaa_gggggggggggggg@012009.pdf", "aaa_gggggggggggggg", 2009, 1, 1 },
 			   	{ "aa_xxxxxxx_rrrr_abcdefg@03032010.pdf", "aa_xxxxxxx_rrrr_abcdefg", 2010, 3, 3 },
 			   	{ "aaabbb_cc_e_dd_fff_f_f_f_F_F_f@24122008.pdf", "aaabbb_cc_e_dd_fff_f_f_f_F_F_f", 2008, 12, 24 },
-			   	{ "uyet_rtert_ewerewe_ewrewrw@112011.pdf", "uyet_rtert_ewerewe_ewrewrw", 2011, 11, 1 }
+			   	{ "uyet_rtert_ewerewe_ewrewrw@112011.pdf", "uyet_rtert_ewerewe_ewrewrw", 2011, 11, 1 },
+			   	{ "aaa_bbb_vvvvv@14112011_p1.jpg", "aaa_bbb_vvvvv", 2011, 11, 14 },	// multi page test
+			   	{ "aaa_bbb_vvvvv@14112011_p2.jpg", "aaa_bbb_vvvvv", 2011, 11, 14 }	// multi page test
 	   			};
 	   return Arrays.asList(data);
 	}
