@@ -4,9 +4,37 @@
 <h1>Overview</h1>
 <h2>Topics</h2>
 
+#set( $col = 0 )
+#set( $dotr = 0 )
+#set( $MAXCOL = 10 )
+<table>
 #foreach( $topic in $documentTopics)
-	<a href="${topicPagePrefix}${topic.getId()}.html">${topic.getName()} [${topic.getCount()}]</a>&nbsp;&nbsp;
+    #if( $col == 0 )
+    	<tr>
+    #end
+	<td>
+		<b>[${topic.getCount()}]</b>
+	</td>
+	<td>
+		<a href="${topicPagePrefix}${topic.getId()}.html">${topic.getName()}</a>&nbsp;&nbsp;&nbsp;
+	</td>
+	#set ( $col = $col + 1 )
+    #if ( $col == $MAXCOL ) 
+    	</tr>
+    	#set ( $col = 0 )
+    #end	
 #end
+
+## wrap up with empty table cells
+#if ( $col > 0 )
+    #set ( $left = $MAXCOL - $col )
+    #foreach ($colnr in [0..$left])
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	#end
+    </tr>
+#end
+</table>
  
 <h2>By Year</h2>
 <table>
