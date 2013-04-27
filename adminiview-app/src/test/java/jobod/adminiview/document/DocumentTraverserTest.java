@@ -8,10 +8,10 @@ import static org.mockito.Mockito.verify;
 
 import java.io.File;
 
+import jobod.adminiview.collect.DocumentClassifyImpl;
+import jobod.adminiview.collect.DocumentSink;
+import jobod.adminiview.collect.DocumentTraverserImpl;
 import jobod.adminiview.document.Document;
-import jobod.adminiview.document.DocumentClassifyImpl;
-import jobod.adminiview.document.DocumentSink;
-import jobod.adminiview.document.DocumentTraverserImpl;
 
 import org.junit.Test;
 
@@ -22,8 +22,9 @@ public class DocumentTraverserTest {
 		
 		DocumentSink sink = mock(DocumentSink.class);
 		DocumentClassifyImpl classifier = new DocumentClassifyImpl();
+		DocumentBuilderFactory factory = new DocumentBuilderFactoryImpl();
 		
-		DocumentTraverserImpl trav = new DocumentTraverserImpl(classifier, sink);
+		DocumentTraverserImpl trav = new DocumentTraverserImpl(factory, classifier, sink);
 		
 		assertEquals(4, trav.recurseDocuments(new File("src/test/resources/travtest")));
 		

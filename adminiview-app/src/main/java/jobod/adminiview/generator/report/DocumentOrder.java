@@ -15,7 +15,7 @@ public class DocumentOrder {
 			public int compare(Document o1, Document o2) {
 				int diff = o2.dateInt() - o1.dateInt();
 				if(diff == 0) {
-					diff = o1.fileName().compareTo(o2.fileName());
+					diff = o2.baseName().compareTo(o2.baseName());
 				}
 				return diff;
 			}

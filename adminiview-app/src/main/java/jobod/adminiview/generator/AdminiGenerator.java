@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import jobod.adminiview.collect.DocumentClassify;
+import jobod.adminiview.collect.DocumentClassifyImpl;
+import jobod.adminiview.collect.DocumentSink;
+import jobod.adminiview.collect.DocumentSinkImpl;
+import jobod.adminiview.collect.DocumentTraverserImpl;
 import jobod.adminiview.document.Document;
-import jobod.adminiview.document.DocumentClassify;
-import jobod.adminiview.document.DocumentClassifyImpl;
-import jobod.adminiview.document.DocumentSink;
-import jobod.adminiview.document.DocumentSinkImpl;
-import jobod.adminiview.document.DocumentTraverserImpl;
+import jobod.adminiview.document.DocumentBuilderFactory;
+import jobod.adminiview.document.DocumentBuilderFactoryImpl;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -47,8 +49,9 @@ public class AdminiGenerator {
 		
 		DocumentSink sink = new DocumentSinkImpl(_verbose);
 		DocumentClassify classifier = new DocumentClassifyImpl();
+		DocumentBuilderFactory factory = new DocumentBuilderFactoryImpl();
 		
-		DocumentTraverserImpl trav = new DocumentTraverserImpl(classifier, sink);
+		DocumentTraverserImpl trav = new DocumentTraverserImpl(factory, classifier, sink);
 
 		trav.recurseDocuments(new File(_inputPath));
 		

@@ -1,6 +1,9 @@
-package jobod.adminiview.document;
+package jobod.adminiview.collect;
 
 import java.io.File;
+
+import jobod.adminiview.document.DocumentInfo;
+import jobod.adminiview.document.DocumentInfoImpl;
 
 public class DocumentClassifyImpl implements DocumentClassify {
 
@@ -11,7 +14,7 @@ public class DocumentClassifyImpl implements DocumentClassify {
 	//  
 	
 	@Override
-	public Document classify(File path) {		
+	public DocumentInfo classify(File path) {		
 		
 		String fileName = path.getName();
 		int timeSepPos = fileName.lastIndexOf("@");
@@ -19,50 +22,52 @@ public class DocumentClassifyImpl implements DocumentClassify {
 		if(timeSepPos == -1 || timeSepPos + 1 >= fileName.length()) {
 			return null;
 		}
-		
-		String baseName = fileName.substring(0, timeSepPos);
-		String[] firstparts = baseName.split("_");
-		if(firstparts == null || firstparts.length == 0) {
+
+		String keywordsString = fileName.substring(0, timeSepPos);
+		if(timeSepPos == 0) {
 			return null;
 		}
 		
-		String subject = firstparts[0];
-		if(subject.isEmpty()) {
+		String[] keywords = keywordsString.split("_");
+		if(keywords == null || keywords.length == 0) {
 			return null;
 		}
-		
-		// TODO: -- Implement keywords
-		
+
 		String datePart = fileName.substring(timeSepPos + 1);
 
-		// remove page before dot
-		int pageNumber = -1;
-		int pageSepPos = datePart.lastIndexOf("_p");
-		if(pageSepPos > 0) {
-			datePart = datePart.substring(0, pageSepPos);		
+		int pageNumber = 1;
+
+		int pageStart = datePart.indexOf("_p");
+		if(pageStart != -1) {
+			int pageEnd = datePart.indexOf(".");
+			if(pageEnd == -1) {
+				pageEnd = datePart.length();
+			}
+			
+			if(pageEnd > (pageStart + 2)) {
+				String page = datePart.substring(pageStart + 2, pageEnd);
+				try {
+					pageNumber = Integer.parseInt(page);
+				}
+				catch(NumberFormatException e) {
+					return null;
+				}
+				
+				datePart = datePart.substring(0, pageStart);
+			}
 		}
 		
 		// remove dot if still present
-		int dotSepPos = datePart.lastIndexOf(".");
-		if(dotSepPos > 0 && pageSepPos == -1) {
-			datePart = datePart.substring(0, dotSepPos);
-		}
-		
-		if(dotSepPos == -1) {
-		}
-		if(dotSepPos != -1) {
+		int dotSepPos = datePart.indexOf(".");
+		if(dotSepPos > 0) {
 			datePart = datePart.substring(0, dotSepPos);
 		}
 
-		DocumentImpl.Builder builder = new DocumentImpl.Builder();
-		builder.setFilePath(path);
-		builder.setSubject(subject);
-		builder.setBaseName(baseName);
+		int year = 0;
+		int day = 1;
+		int month = 1;
 
 		try {
-			int year = 0;
-			int day = 1;
-			int month = 1;
 			if(datePart.length() == 4) {
 				year = Integer.parseInt(datePart);
 			}
@@ -78,21 +83,19 @@ public class DocumentClassifyImpl implements DocumentClassify {
 			else {
 				return null;
 			}
-			
-			if(day < 1 || day > 31 
-					|| month < 1 || month > 12 
-					|| year < 1900 || year > 2100) {
-				return null;
-			}
-			
-			builder.setDay(day);
-			builder.setMonth(month);
-			builder.setYear(year);
 		}
 		catch(NumberFormatException e) {
 			return null;
 		}
+		
+		if(day < 1 || day > 31 
+				|| month < 1 || month > 12 
+				|| year < 1900 || year > 2100) {
+			return null;
+		}
 
-		return builder.build();
+		String baseName = keywordsString + "@" + datePart;
+		
+		return new DocumentInfoImpl(baseName, keywords, pageNumber, day, month, year);
 	}
 }

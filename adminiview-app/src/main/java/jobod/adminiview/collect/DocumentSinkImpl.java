@@ -1,8 +1,11 @@
-package jobod.adminiview.document;
+package jobod.adminiview.collect;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import jobod.adminiview.document.Document;
+import jobod.adminiview.document.DocumentFile;
 
 public class DocumentSinkImpl implements DocumentSink {
 
@@ -21,12 +24,14 @@ public class DocumentSinkImpl implements DocumentSink {
 	@Override
 	public void register(Document document) {
 		// TODO: -- Check for doubles?
+		
 		if(_verbose) {
-			System.out.println("Found: " + document.fileName());
+			System.out.println("Found document with file(s) :");
+			for(DocumentFile df : document.documentFiles()) {
+				System.out.println(" - " + df.fileName() + " (page " + df.pageNumber());
+			}
 		}
-		
-		// TODO: check if the base name is similar
-		
+
 		_documents.add(document);
 	}
 

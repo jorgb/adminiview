@@ -6,9 +6,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 
+import jobod.adminiview.collect.DocumentClassify;
+import jobod.adminiview.collect.DocumentClassifyImpl;
 import jobod.adminiview.document.Document;
-import jobod.adminiview.document.DocumentClassify;
-import jobod.adminiview.document.DocumentClassifyImpl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class BatchClassifyInvalidTimeForDocumentTest {
+public class BatchClassifyInvalidTimeForDocumentInfoTest {
 
 	@Parameters
 	public static Collection<Object[]> data() {
@@ -59,27 +59,39 @@ public class BatchClassifyInvalidTimeForDocumentTest {
 	private DocumentClassify _c;
 	private String _dateBase;
 	
-	public BatchClassifyInvalidTimeForDocumentTest(String dateBase) {
+	public BatchClassifyInvalidTimeForDocumentInfoTest(String dateBase) {
 		_dateBase = dateBase;
 		_c = new DocumentClassifyImpl();
 	}
 	 
 	@Test
 	public void testInvalidDocumentExtractionWithExtension() {
-		Document d = _c.classify(new File("keyword@" + _dateBase + ".pdf"));
-		assertNull(d);
+		DocumentInfo di = _c.classify(new File("keyword@" + _dateBase + ".pdf"));
+		assertNull(di);
 	}
 
 	@Test
 	public void testInvalidDocumentExtractionWithExtensionTwoKeywords() {
-		Document d = _c.classify(new File("keyword_blah@" + _dateBase + ".pdf"));
-		assertNull(d);
+		DocumentInfo di = _c.classify(new File("keyword_blah@" + _dateBase + ".pdf"));
+		assertNull(di);
 	}
 
 	@Test
 	public void testInvalidDocumentExtractionWithoutExtension() {
-		Document d = _c.classify(new File("keyword@" + _dateBase));
-		assertNull(d);
+		DocumentInfo di = _c.classify(new File("keyword@" + _dateBase));
+		assertNull(di);
+	}
+
+	@Test
+	public void testInvalidDocumentExtractionWithPage() {
+		DocumentInfo di = _c.classify(new File("keyword@" + _dateBase + "p1"));
+		assertNull(di);
+	}
+
+	@Test
+	public void testInvalidDocumentExtractionWithPageAndExtension() {
+		DocumentInfo di = _c.classify(new File("keyword@" + _dateBase + "p1.txt"));
+		assertNull(di);
 	}
 
 }

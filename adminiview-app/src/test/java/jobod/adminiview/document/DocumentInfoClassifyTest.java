@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import jobod.adminiview.collect.DocumentClassifyImpl;
 import jobod.adminiview.document.Document;
-import jobod.adminiview.document.DocumentClassifyImpl;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class DocumentClassifyTest {
+public class DocumentInfoClassifyTest {
 
 	private DocumentClassifyImpl _c;
 
@@ -24,19 +24,16 @@ public class DocumentClassifyTest {
 		
 		String fileName = "subject@2013.ext";
 		
-		Document d = _c.classify(new File(fileName));
-		assertNotNull(d);
+		DocumentInfo di = _c.classify(new File(fileName));
+		assertNotNull(di);
 		
-		assertEquals("subject@2013.ext", d.fileName());
-		assertEquals(2013, d.year());
-		assertEquals("subject", d.topic());
+		assertEquals("subject@2013", di.baseName());
+		assertEquals(2013, di.year());
+		assertEquals("subject", di.keywords()[0]);
 
 		// implicit set
-		assertEquals(1, d.day());
-		assertEquals(1, d.month());
-		
-		
-		
+		assertEquals(1, di.day());
+		assertEquals(1, di.month());
 	}
 	
 	@Test
@@ -44,16 +41,16 @@ public class DocumentClassifyTest {
 		
 		String fileName = "topic@2009.pdf";
 		
-		Document d = _c.classify(new File(fileName));
-		assertNotNull(d);
+		DocumentInfo di = _c.classify(new File(fileName));
+		assertNotNull(di);
 		
-		assertEquals("topic@2009.pdf", d.fileName());
-		assertEquals(2009, d.year());
-		assertEquals("topic", d.topic());
+		assertEquals("topic@2009", di.baseName());
+		assertEquals(2009, di.year());
+		assertEquals("topic", di.keywords()[0]);
 
 		// implicit set
-		assertEquals(1, d.day());
-		assertEquals(1, d.month());
+		assertEquals(1, di.day());
+		assertEquals(1, di.month());
 	}
 	
 	@Test
@@ -66,9 +63,10 @@ public class DocumentClassifyTest {
 			fileName = String.format("topic@%04d.pdf", i);
 			assertNull("Year : " + i, _c.classify(new File(fileName)));
 		}
+		
 		for(int i = 1900; i < 2101; i++) {
 			String fileName = String.format("topic@%d.pdf", i);
-			Document d = _c.classify(new File(fileName));
+			DocumentInfo d = _c.classify(new File(fileName));
 			assertNotNull("Year : " + i, d);
 			assertEquals(i, d.year());
 			assertEquals(1, d.day());
@@ -82,6 +80,7 @@ public class DocumentClassifyTest {
 			assertEquals(1, d.day());
 			assertEquals(1, d.month());
 		}
+		
 		for(int i = 2101; i < 9999; i++) {
 			String fileName = String.format("topic@%d.pdf", i);
 			assertNull("Year : " + i, _c.classify(new File(fileName)));
@@ -107,19 +106,35 @@ public class DocumentClassifyTest {
 	
 	@Test
 	public void documentsWithoutExtensionsShouldClassify() {
-		Document doc1 = _c.classify(new File("topic@2009"));
+		DocumentInfo doc1 = _c.classify(new File("topic@2009"));
 		assertNotNull(doc1);
 		assertEquals(2009, doc1.year());
 		
-		Document doc2 = _c.classify(new File("topic@121992"));
+		DocumentInfo doc2 = _c.classify(new File("topic@121992"));
 		assertNotNull(doc2);
 		assertEquals(1992, doc2.year());
 		assertEquals(12, doc2.month());
 		
-		Document doc3 = _c.classify(new File("topic@21052010"));
+		DocumentInfo doc3 = _c.classify(new File("topic@21052010"));
 		assertNotNull(doc3);
 		assertEquals(2010, doc3.year());
 		assertEquals(05, doc3.month());
 		assertEquals(21, doc3.day());
 	}
+	
+	@Test
+	public void documentWithPageSeperation() {
+		String fileName = "a@02032001_p4.ext";
+		
+		DocumentInfo di = _c.classify(new File(fileName));
+		assertNotNull(di);
+		
+		assertEquals("a@02032001", di.baseName());
+		assertEquals(2001, di.year());
+		assertEquals(02, di.day());
+		assertEquals(03, di.month());
+		
+		assertEquals(4, di.pageNumber());		
+	}
+	
 }

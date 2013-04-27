@@ -1,5 +1,7 @@
 package jobod.adminiview.document;
 
+import java.util.Collection;
+
 public interface Document {
 
 	/**
@@ -10,9 +12,9 @@ public interface Document {
 	 */
 	String baseName();
 	
-	String pathURL();
+	String parentPathURL();
 	
-	String fileName();
+	Collection<DocumentFile> documentFiles();
 
 	String topic();
 		

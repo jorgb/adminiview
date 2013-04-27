@@ -1,4 +1,4 @@
-package jobod.adminiview.document;
+package jobod.adminiview.collect;
 
 import java.io.File;
 
