@@ -11,15 +11,20 @@ public class DocumentImpl implements Document {
 	public static class Builder {
 		
 		private File _filePath;
-		private String _subject;
+		private String _subject = "";
 		private int _day;
 		private int _month;
 		private int _year;
+		public String _baseName = "";
 
 		public Builder() {
 			_day = 1;
 			_month = 1;
 			_year = Calendar.getInstance().get(Calendar.YEAR);
+		}
+		
+		void setBaseName(String baseName) {
+			_baseName = baseName;
 		}
 		
 		void setFilePath(File filePath) {
@@ -57,10 +62,12 @@ public class DocumentImpl implements Document {
 	private final String _subject;
 	private final int _dateInt;
 	private final String _dateString;
+	private final String _baseName;
 	
 	private DocumentImpl(Builder b) {
 		_path = b._filePath;
 		_name = b._filePath.getName();
+		_baseName = b._baseName;
 		_day = b._day;		
 		_month = b._month;
 		_year = b._year;
@@ -117,6 +124,11 @@ public class DocumentImpl implements Document {
 	@Override
 	public String dateString() {
 		return _dateString;
+	}
+
+	@Override
+	public String baseName() {
+		return _baseName;
 	}
 
 }

@@ -24,6 +24,9 @@ public class DocumentSinkImpl implements DocumentSink {
 		if(_verbose) {
 			System.out.println("Found: " + document.fileName());
 		}
+		
+		// TODO: check if the base name is similar
+		
 		_documents.add(document);
 	}
 

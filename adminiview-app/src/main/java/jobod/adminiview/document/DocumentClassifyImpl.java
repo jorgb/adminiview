@@ -20,7 +20,8 @@ public class DocumentClassifyImpl implements DocumentClassify {
 			return null;
 		}
 		
-		String[] firstparts = fileName.substring(0, timeSepPos).split("_");
+		String baseName = fileName.substring(0, timeSepPos);
+		String[] firstparts = baseName.split("_");
 		if(firstparts == null || firstparts.length == 0) {
 			return null;
 		}
@@ -35,9 +36,10 @@ public class DocumentClassifyImpl implements DocumentClassify {
 		String datePart = fileName.substring(timeSepPos + 1);
 
 		// remove page before dot
-		int pageSepPos = datePart.lastIndexOf("_");
+		int pageNumber = -1;
+		int pageSepPos = datePart.lastIndexOf("_p");
 		if(pageSepPos > 0) {
-			datePart = datePart.substring(0, pageSepPos);
+			datePart = datePart.substring(0, pageSepPos);		
 		}
 		
 		// remove dot if still present
@@ -55,6 +57,7 @@ public class DocumentClassifyImpl implements DocumentClassify {
 		DocumentImpl.Builder builder = new DocumentImpl.Builder();
 		builder.setFilePath(path);
 		builder.setSubject(subject);
+		builder.setBaseName(baseName);
 
 		try {
 			int year = 0;

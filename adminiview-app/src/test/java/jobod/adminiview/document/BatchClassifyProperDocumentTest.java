@@ -40,10 +40,12 @@ public class BatchClassifyProperDocumentTest {
 	private int _year;
 	private DocumentClassify _c;
 	private String _fileName;
+	private String _baseName;
 	
 	 public BatchClassifyProperDocumentTest(String fileName, String keywords, int year, int month, int day) {
 		 _fileName = fileName;
 		 _topic = keywords.split("_")[0];
+		 _baseName = keywords;
 		 _day = day;
 		 _month = month;
 		 _year = year;
@@ -62,5 +64,7 @@ public class BatchClassifyProperDocumentTest {
 		 // TODO: -- Test keywords
 	 
 		 assertEquals(_topic, d.topic());
+		 
+		 assertEquals(_baseName, d.baseName());
 	 }
 }
