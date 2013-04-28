@@ -29,4 +29,6 @@ public interface Document {
 	String dateString();
 
 	int pageCount();
+	
+	String[] keywords();
 }

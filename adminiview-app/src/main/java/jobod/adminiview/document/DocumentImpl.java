@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class DocumentImpl implements Document {
 	private final int _dateInt;
 	private final String _dateString;
 	private final String _baseName;
+	private String[] _keywords;
 	
 	private DocumentImpl(Builder b) {
 		_parentPath = b._parentPath;
@@ -81,8 +83,10 @@ public class DocumentImpl implements Document {
 		_year = b._year;
 
 		_subject = b._subject;
+		_keywords = b._keywords;
 
 		_documentFiles = new ArrayList<DocumentFile>(b._documentFiles);
+		Collections.sort(_documentFiles);
 		
 		Calendar cal = Calendar.getInstance();
 		cal.clear();
@@ -144,6 +148,11 @@ public class DocumentImpl implements Document {
 	@Override
 	public int pageCount() {
 		return _documentFiles.size();
+	}
+
+	@Override
+	public String[] keywords() {
+		return _keywords;
 	}
 
 }

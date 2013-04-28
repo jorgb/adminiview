@@ -20,4 +20,8 @@ public class DocumentFileImpl implements DocumentFile {
 		return _pageNumber;
 	}
 
+	@Override
+	public int compareTo(DocumentFile other) {
+		return pageNumber() - other.pageNumber();
+	}
 }

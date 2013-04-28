@@ -9,9 +9,21 @@
 		<h2>${reportedYear.monthName(${month})} ${reportedYear.getYear()}</h2>
 		<table>
 			#foreach( $document in $reportedYear.documentsByMonth($month) )
-				<tr>
-					<td>${document.dateString()}</td><td><a href="${document.pathURL()}" target="_blank">${document.fileName()}</a></td>
-				</tr>
+			<tr>
+				<td>${document.dateString()}&nbsp;&nbsp;&nbsp;</td>
+				<td>
+				<b>${document.topic()}</b>&nbsp;
+				#foreach( $keyword in $document.keywords() )
+					${keyword}&nbsp;
+				#end
+				</td>
+			
+				<td>
+				#foreach ( $documentFile in $document.documentFiles() ) 
+					<a href="${document.parentPathURL()}/${documentFile.fileName()}" target="_blank">[page ${documentFile.pageNumber()}]</a> &nbsp;
+				#end
+				</td>
+			</tr>
 			#end
 		</table>
 	#end

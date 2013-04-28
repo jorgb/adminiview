@@ -28,7 +28,7 @@ public class DocumentSinkImpl implements DocumentSink {
 		if(_verbose) {
 			System.out.println("Found document with file(s) :");
 			for(DocumentFile df : document.documentFiles()) {
-				System.out.println(" - " + df.fileName() + " (page " + df.pageNumber());
+				System.out.println(" - " + df.fileName() + " (page " + df.pageNumber() + ")");
 			}
 		}
 

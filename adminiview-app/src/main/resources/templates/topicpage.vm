@@ -4,7 +4,18 @@
 <table>
 #foreach( $document in $topicDocuments )
 <tr>
-<td>${document.dateString()}</td><td><a href="${document.pathURL()}" target="_blank">${document.fileName()}</a></td>
+	<td>${document.dateString()}&nbsp;&nbsp;&nbsp;</td>
+	<td>
+	#foreach( $keyword in $document.keywords() )
+		${keyword}&nbsp;
+	#end
+	</td>
+
+	<td>
+	#foreach ( $documentFile in $document.documentFiles() ) 
+		<a href="${document.parentPathURL()}/${documentFile.fileName()}" target="_blank">[page ${documentFile.pageNumber()}]</a> &nbsp;
+	#end
+	</td>
 </tr>
 #end
 </table>

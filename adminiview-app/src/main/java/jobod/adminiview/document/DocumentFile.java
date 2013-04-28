@@ -1,6 +1,6 @@
 package jobod.adminiview.document;
 
-public interface DocumentFile {
+public interface DocumentFile extends Comparable<DocumentFile> {
 
 	String fileName();
 	
