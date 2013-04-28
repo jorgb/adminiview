@@ -1,4 +1,9 @@
 <html>
+<head>
+	<link rel="stylesheet" type="text/css" href="adminiview.css">
+	<title>Topic ${topicName}</title>
+</head>
+
 <body>
 <h1>${topicName}</h1>
 <table>
