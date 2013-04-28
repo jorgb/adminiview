@@ -34,7 +34,7 @@ public class DocumentTraverserImpl implements DocumentTraverser {
 						 builder = _factory.createBuilder(info, item.getParentFile());
 						 documents.put(info.baseName(), builder);
 					}					
-					builder.addFile(info.pageNumber(), path.getName());
+					builder.addFile(info.pageNumber(), item.getName());
 				}				
 			}
 			else if(item.isDirectory()) {

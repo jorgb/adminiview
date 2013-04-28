@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -138,8 +137,13 @@ public class DocumentImpl implements Document {
 	}
 
 	@Override
-	public Collection<DocumentFile> documentFiles() {
+	public List<DocumentFile> documentFiles() {
 		return _documentFiles;
+	}
+
+	@Override
+	public int pageCount() {
+		return _documentFiles.size();
 	}
 
 }

@@ -36,7 +36,7 @@ public class DocumentSinkImpl implements DocumentSink {
 	}
 
 	@Override
-	public Collection<Document> documents() {
+	public List<Document> documents() {
 		return _documents;
 	}
 }

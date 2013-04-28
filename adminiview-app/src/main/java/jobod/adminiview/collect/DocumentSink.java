@@ -1,6 +1,6 @@
 package jobod.adminiview.collect;
 
-import java.util.Collection;
+import java.util.List;
 
 import jobod.adminiview.document.Document;
 
@@ -9,6 +9,6 @@ public interface DocumentSink {
 
 	void register(Document document);
 	
-	Collection<Document> documents();
+	List<Document> documents();
 	
 }

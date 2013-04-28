@@ -1,6 +1,6 @@
 package jobod.adminiview.document;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Document {
 
@@ -14,7 +14,7 @@ public interface Document {
 	
 	String parentPathURL();
 	
-	Collection<DocumentFile> documentFiles();
+	List<DocumentFile> documentFiles();
 
 	String topic();
 		
@@ -27,4 +27,6 @@ public interface Document {
 	int dateInt();	
 	
 	String dateString();
+
+	int pageCount();
 }
