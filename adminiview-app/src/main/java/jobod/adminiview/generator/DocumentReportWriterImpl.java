@@ -1,8 +1,11 @@
 package jobod.adminiview.generator;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +21,7 @@ import jobod.adminiview.generator.report.DocumentOrder;
 import jobod.adminiview.generator.report.ReportedYear;
 import jobod.adminiview.generator.report.Topic;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -36,8 +40,10 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 	
 		Properties p = new Properties(); 
 		
-		p.setProperty("resource.loader", "file, class");
-		p.setProperty("file.resource.loader.path", "src/main/resources");
+		// TODO: File references to template file(s) outside class
+		
+		p.setProperty("resource.loader", "class");
+		//p.setProperty("file.resource.loader.path", "src/main/resources");
 		p.setProperty("class.resource.loader.class", ClasspathResourceLoader.class.getName());
 		
 		p.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute");
@@ -61,6 +67,30 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 			generateReportedYear(ry);
 		}
 		
+		copyStaticFile("adminiview.css");
+		
+	}
+
+	private void copyStaticFile(String fileRef) {
+		try {
+			InputStream stream = ClassLoader.getSystemResourceAsStream("copying/" + fileRef);
+			OutputStream out = new FileOutputStream(new File(_outputPath, fileRef));
+			
+			try {
+				IOUtils.copy(stream,  out);
+			}
+			finally {
+				if(stream != null) {
+					stream.close();
+				}
+				if(out != null) {
+					out.close();
+				}
+			}
+		}
+		catch(IOException e) {
+			// ignore
+		}
 	}
 
 	private void generateReportedYear(ReportedYear ry) throws IOException {
