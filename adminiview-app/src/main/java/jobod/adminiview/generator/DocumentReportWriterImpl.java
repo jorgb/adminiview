@@ -18,6 +18,7 @@ import java.util.Properties;
 
 import jobod.adminiview.document.Document;
 import jobod.adminiview.generator.report.DocumentOrder;
+import jobod.adminiview.generator.report.Keyword;
 import jobod.adminiview.generator.report.ReportedYear;
 import jobod.adminiview.generator.report.Topic;
 
@@ -28,6 +29,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 public class DocumentReportWriterImpl implements DocumentReportWriter {
+	private final String KEYWORD_PAGE_PREFIX = "keyword_";
 	private final String TOPIC_PAGE_PREFIX = "topic_";
 	private final String YEAR_PAGE_PREFIX = "year_";
 	
@@ -56,8 +58,9 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 		
 		Collection<Topic> topics = getTopicElements();
 		Collection<ReportedYear> reportedYears = getReportedYears();
+		List<Keyword> keywordCloud = getKeywordCloud();
 		
-		generateMainPage(topics, reportedYears);
+		generateMainPage(topics, reportedYears, keywordCloud);
 		
 		for(Topic t : topics) {
 			generateTopicPage(t.getId(), t.getName());
@@ -67,30 +70,28 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 			generateReportedYear(ry);
 		}
 		
+		for(Keyword k : keywordCloud) {
+			generateKeywordPage(k);
+		}
+		
 		copyStaticFile("adminiview.css");
 		
 	}
 
-	private void copyStaticFile(String fileRef) {
+	private void generateKeywordPage(Keyword k) throws IOException {
+		Template t = Velocity.getTemplate("templates/keywordpage.vm");
+
+		VelocityContext context = new VelocityContext();
+		
+		context.put("keyword", k);
+						
+		Writer writer = getOutputFor(KEYWORD_PAGE_PREFIX + k.getId() + ".html");
 		try {
-			InputStream stream = ClassLoader.getSystemResourceAsStream("copying/" + fileRef);
-			OutputStream out = new FileOutputStream(new File(_outputPath, fileRef));
-			
-			try {
-				IOUtils.copy(stream,  out);
-			}
-			finally {
-				if(stream != null) {
-					stream.close();
-				}
-				if(out != null) {
-					out.close();
-				}
-			}
+			t.merge(context, writer);		
 		}
-		catch(IOException e) {
-			// ignore
-		}
+		finally {
+			writer.close();
+		}			
 	}
 
 	private void generateReportedYear(ReportedYear ry) throws IOException {
@@ -138,14 +139,18 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 		}	
 	}
 
-	private void generateMainPage(Collection<Topic> topics, Collection<ReportedYear> reportedYears) throws IOException {
+	private void generateMainPage(Collection<Topic> topics, Collection<ReportedYear> reportedYears, List<Keyword> keywordCloud) throws IOException {
 
 		Template t = Velocity.getTemplate("templates/mainpage.vm");
-
+		
+		
 		VelocityContext context = new VelocityContext();
 		context.put("topicPagePrefix", TOPIC_PAGE_PREFIX);
 		context.put("yearPagePrefix", YEAR_PAGE_PREFIX);
+		context.put("keywordPagePrefix", KEYWORD_PAGE_PREFIX);
+		
 		context.put("documentTopics", topics);
+		context.put("keywordCloud", keywordCloud);
 		context.put("documentsByYear", reportedYears);
 		
 		Writer writer = getOutputFor("index.html");
@@ -201,5 +206,60 @@ public class DocumentReportWriterImpl implements DocumentReportWriter {
 		Collections.sort(elements);
 		
 		return elements;
+	}
+
+	private List<Keyword> getKeywordCloud() {
+		Map<String, Keyword> keywords = new HashMap<String, Keyword>();
+		
+		int maxCount = 0;
+		int id = 0;
+		for(Document d : _documents) {
+			for(String kwd : d.keywords()) {
+				String keyword = kwd.toLowerCase();
+				Keyword k = keywords.get(kwd);
+				if(k == null) {
+					k = new Keyword(keyword, id++);
+					keywords.put(keyword, k);
+				}
+
+				k.addDocument(d);
+				
+				maxCount = Math.max(maxCount, k.getCount());
+			}
+		}
+		
+		List<Keyword> result = new ArrayList<Keyword>(keywords.values());
+	
+		double granularity = 325; // + 85 is max percentage
+		for(Keyword k : result) {
+			double ratio = (double)k.getCount() / (double)maxCount; 	
+			int percRatio = (int)((granularity * ratio) + 85);
+			k.finalizeKeyword(percRatio);
+		}
+		
+		Collections.sort(result);
+		return result;
+	}
+
+	private void copyStaticFile(String fileRef) {
+		try {
+			InputStream stream = ClassLoader.getSystemResourceAsStream("copying/" + fileRef);
+			OutputStream out = new FileOutputStream(new File(_outputPath, fileRef));
+			
+			try {
+				IOUtils.copy(stream,  out);
+			}
+			finally {
+				if(stream != null) {
+					stream.close();
+				}
+				if(out != null) {
+					out.close();
+				}
+			}
+		}
+		catch(IOException e) {
+			// ignore
+		}
 	}
 }

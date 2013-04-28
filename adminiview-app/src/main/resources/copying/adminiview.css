@@ -1,3 +1,27 @@
 /* General font size zoom */
 body, td { font-size: 130%; }
 
+a:link {
+  /* Applies to all unvisited links */
+  text-decoration:  none;
+  color:            #0134ff;
+} 
+
+a:visited {
+  /* Applies to all visited links */
+  text-decoration:  none;
+  color:            #00209e;
+} 
+
+a:hover {
+  /* Applies to links under the pointer */
+  text-decoration:  underline;
+  font-weight:      #0134ff;
+} 
+
+a:active {
+  /* Applies to activated links */
+  text-decoration:  underline;
+  background-color: #ffff00;
+} 
+

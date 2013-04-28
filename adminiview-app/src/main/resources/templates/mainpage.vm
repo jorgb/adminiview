@@ -59,5 +59,9 @@
 
 <h2>Keyword Cloud</h2>
 
+#foreach( $keyword in $keywordCloud )
+   <span style="font-size: ${keyword.percentRatio()}%"><a href="${keywordPagePrefix}${keyword.getId()}.html">${keyword.getLabel()}</a></span>&nbsp;
+#end
+
 </body>
 <html>
