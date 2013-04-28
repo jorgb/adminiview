@@ -1,0 +1,34 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="adminiview.css">
+	<title>Keyword ${keyword.getLabel()}</title>
+</head>
+
+<body>
+<h1>${keyword.getLabel()}</h1>
+<table>
+#foreach( $document in ${keyword.documents()} )
+<tr>
+	<td>${document.dateString()}&nbsp;&nbsp;&nbsp;</td>
+	<td>
+	${document.topic()}&nbsp;
+	#foreach( $k in $document.keywords() )
+		#if ( ${k} == ${keyword.getLabel()} )
+			<b>${k}</b>
+		#else
+			${k}
+		#end
+		&nbsp;
+	#end
+	</td>
+
+	<td>
+	#foreach ( $documentFile in $document.documentFiles() ) 
+		<a href="${document.parentPathURL()}/${documentFile.fileName()}" target="_blank">[page ${documentFile.pageNumber()}]</a> &nbsp;
+	#end
+	</td>
+</tr>
+#end
+</table>
+</body>
+<html>
